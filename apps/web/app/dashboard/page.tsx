@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { StudentData, ReadingProgress, VocabularyStats } from './dashboard';
+import { Sidebar } from 'lucide-react';
 
 export default function Dashboard() {
   // State management using React hooks
@@ -131,6 +132,13 @@ export default function Dashboard() {
         >
           View Progress
         </Link>
+        <button
+          onClick={() => alert('Feature coming soon!')}
+          className="bg-gray-500 text-white p-4 rounded-lg text-center hover:bg-gray-600 transition"
+        >
+          Join Community
+        </button>
+        <Sidebar className="mx-auto my-4 text-gray-700" />
       </div>
     </div>
   );
