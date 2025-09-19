@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
+import Dashboard from './dashboard/page';
 import Image, { type ImageProps } from "next/image";
 import { Button } from "@repo/ui/button";
 import styles from "./page.module.css";
@@ -20,51 +23,15 @@ const ThemeImage = (props: Props) => {
 
 export default function Home() {
     return (
-        <div className={styles.page}>
-            <main className={styles.main}>
-                <h1>CISC474 Project Starter</h1>
-                <ol>
-                    <li>
-                        Get started by editing{" "}
-                        <code>apps/web/app/page.tsx</code>
-                    </li>
-                    <li>Save and see your changes instantly.</li>
-                </ol>
-
-                <Button appName="web" className={styles.secondary}>
-                    Open alert
-                </Button>
-            </main>
-            <footer className={styles.footer}>
-                <a
-                    href="https://vercel.com/templates?search=turborepo&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    <Image
-                        aria-hidden
-                        src="/window.svg"
-                        alt="Window icon"
-                        width={16}
-                        height={16}
-                    />
-                    Examples
-                </a>
-                <a
-                    href="https://turborepo.com?utm_source=create-turbo"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    <Image
-                        aria-hidden
-                        src="/globe.svg"
-                        alt="Globe icon"
-                        width={16}
-                        height={16}
-                    />
-                    Go to turborepo.com →
-                </a>
-            </footer>
+        <div className="min-h-screen bg-gray-100 p-8">
+            {/* Welcome Section */}
+            <div className="mb-8">
+                <h1 className="text-3xl font-bold text-gray-800">
+                    Welcome back, Student
+                    <div className="text-sm text-gray-500">Here&apos;s your learning dashboard</div>
+                    <Dashboard />
+                </h1>
+            </div>
         </div>
     );
 }

@@ -33,7 +33,7 @@ export default function Home() {
         />
         <ol>
           <li>
-            GEGHAEGHAELGHLAEGHIH started by editing <code>apps/docs/app/page.tsx</code>
+            GEGHAEGHAELGH;ojjkjkjkljkxLAEGHIH started by editing <code>apps/docs/app/page.tsx</code>
           </li>
           <li>
             GEGHAEGHAELGHLAEGHIH started by editing <code>apps/docs/app/page.tsx</code>
