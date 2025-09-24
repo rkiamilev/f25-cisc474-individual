@@ -18,4 +18,5 @@ export interface VocabularyStats {
   newWords: number;
   hskLevel: number;
   hskProgress: number;
+  //fix this later to acftcl_prof_level
 }
