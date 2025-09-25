@@ -26,23 +26,23 @@ export default function Dashboard() {
     };
   };
 
-  const getReadingProgress = (userId: string) => {
-    // Mock data - replace with actual API call
-    return {
-      dailyStreak: 7,
-      weeklyCount: 12
-    };
-  };
+//   const getReadingProgress = (userId: string) => {
+//     // Mock data - replace with actual API call
+//     return {
+//       dailyStreak: 7,
+//       weeklyCount: 12
+//     };
+//   };
 
-  const getVocabularyStats = (userId: string) => {
-    // Mock data - replace with actual API call
-    return {
-      knownWords: 234,
-      newWords: 15,
-      hskLevel: 3,
-      hskProgress: 68
-    };
-  };
+//   const getVocabularyStats = (userId: string) => {
+//     // Mock data - replace with actual API call
+//     return {
+//       knownWords: 234,
+//       newWords: 15,
+//       hskLevel: 3,
+//       hskProgress: 68
+//     };
+//   };
 
   const getRecommendedArticles = (studentLevel: string) => {
     // Mock data - replace with actual API call
@@ -52,13 +52,13 @@ export default function Dashboard() {
   useEffect(() => {
     // Following your pseudocode structure
     const student = getCurrentStudent();
-    const progress = getReadingProgress(student.id);
-    const vocab = getVocabularyStats(student.id);
+    // const progress = getReadingProgress(student.id);
+    // const vocab = getVocabularyStats(student.id);
     //const articles = getRecommendedArticles(student.level);
 
     setStudentData(student);
-    setReadingProgress(progress);
-    setVocabularyStats(vocab);
+    // setReadingProgress(progress);
+    // setVocabularyStats(vocab);
     //setRecommendedArticles(articles);
   }, []);
 
