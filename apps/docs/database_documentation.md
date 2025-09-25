@@ -1,5 +1,9 @@
 # Prisma Schema and Database Documentation
 
+## CSV Files
+apps/docs/User_rows(1).csv
+apps/docs/words_rows(1).csv
+
 ## Prisma Schema File
 - **Link to schema**: [packages/database/prisma/schema.prisma](../packages/database/prisma/schema.prisma)
 
