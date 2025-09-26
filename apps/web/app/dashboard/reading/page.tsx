@@ -1,4 +1,6 @@
 import Link from 'next/link';
+// import {prisma} from '@repo/database';
+// import { NextResponse } from 'next/server'; 
 
 export default function Reading() {
   return (
@@ -8,6 +10,7 @@ export default function Reading() {
           ← Back to Dashboard
         </Link>
         <h1 className="text-3xl font-bold text-gray-800">Reading Page</h1>
+
         <p className="text-gray-600 mt-2">Text scanner and dictionary lookup functionality will be implemented here.</p>
       </div>
     </div>

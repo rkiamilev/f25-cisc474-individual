@@ -2,13 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { StudentData, ReadingProgress, VocabularyStats } from '@/components/navbar/types'; 
+//import { StudentData, ReadingProgress, VocabularyStats } from '@/components/navbar/types'; 
 
 export default function Dashboard() {
   // Initialize state variables (following your pseudocode)
-  const [studentData, setStudentData] = useState<StudentData | null>(null);
-  const [readingProgress, setReadingProgress] = useState<ReadingProgress | null>(null);
-  const [vocabularyStats, setVocabularyStats] = useState<VocabularyStats | null>(null);
+  // const [studentData, setStudentData] = useState<StudentData | null>(null);
+  // const [readingProgress, setReadingProgress] = useState<ReadingProgress | null>(null);
+  // const [vocabularyStats, setVocabularyStats] = useState<VocabularyStats | null>(null);
   //const [recommendedArticles, setRecommendedArticles] = useState([]);
 
   // Helper functions (as per your pseudocode)
@@ -50,19 +50,18 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    // Following your pseudocode structure
-    const student = getCurrentStudent();
+    //const student = getCurrentStudent();
     // const progress = getReadingProgress(student.id);
     // const vocab = getVocabularyStats(student.id);
     //const articles = getRecommendedArticles(student.level);
 
-    setStudentData(student);
+    //setStudentData(student);
     // setReadingProgress(progress);
     // setVocabularyStats(vocab);
     //setRecommendedArticles(articles);
   }, []);
 
-  if (!studentData || !readingProgress || !vocabularyStats) {
+  if (0) { //!studentData || !readingProgress || !vocabularyStats
     return <div className="min-h-screen bg-gray-100 p-8">Loading...</div>;
   }
 
@@ -71,7 +70,7 @@ export default function Dashboard() {
       {/* Display welcome message (from pseudocode) */}
       <div className="mb-8">
         <h1 className="text-4xl font-bold text-gray-800">
-          Welcome back, {studentData.name}
+          Welcome back, Student
         </h1>
         <p className="text-gray-600 mt-2">Continue your Russian learning journey</p>
       </div>
@@ -85,11 +84,11 @@ export default function Dashboard() {
           <div className="space-y-4">
             <div>
               <p className="text-gray-600">Daily Streak</p>
-              <p className="text-3xl font-bold text-blue-500">{readingProgress.dailyStreak} days</p>
+              <p className="text-3xl font-bold text-blue-500"> days</p>
             </div>
             <div>
               <p className="text-gray-600">Articles finished this week</p>
-              <p className="text-2xl font-bold text-gray-800">{readingProgress.weeklyCount}</p>
+              <p className="text-2xl font-bold text-gray-800"></p>
             </div>
           </div>
         </div>
@@ -100,26 +99,26 @@ export default function Dashboard() {
           <div className="space-y-4">
             <div>
               <p className="text-gray-600">Total known words</p>
-              <p className="text-3xl font-bold text-purple-500">{vocabularyStats.knownWords}</p>
+              <p className="text-3xl font-bold text-purple-500"> </p>
             </div>
             <div>
               <p className="text-gray-600">Words added this week</p>
-              <p className="text-2xl font-bold text-gray-800">{vocabularyStats.newWords}</p>
+              <p className="text-2xl font-bold text-gray-800"> </p>
             </div>
             <div>
               <p className="text-gray-600">Current HSK Level Progress</p>
               <div className="w-full bg-gray-200 rounded-full h-3 mt-2">
                 <div 
                   className="bg-purple-500 h-3 rounded-full transition-all duration-300" 
-                  style={{ width: `${vocabularyStats.hskProgress}%` }}
+                  style={{ width: `0%` }}
                 ></div>
               </div>
-              <p className="text-sm text-gray-500 mt-1">{vocabularyStats.hskProgress}% to HSK {vocabularyStats.hskLevel + 1}</p>
+              <p className="text-sm text-gray-500 mt-1">0% to HSK 1</p>
             </div>
           </div>
         </div>
 
-        {/* Recommended Content Section (from pseudocode) */}
+        {/* Recommended Content Section (from pseudocode)
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-xl font-semibold mb-4 text-green-600">Your favorite topics</h2>
           <div className="space-y-3">
@@ -130,7 +129,7 @@ export default function Dashboard() {
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* Quick Actions (from pseudocode) */}

@@ -24,10 +24,48 @@ const RUSSIAN_WORDS = [
   { word: 'плохо', translation: 'bad/poorly', definition: 'negative evaluation', partOfSpeech: 'adverb', pronunciation: 'plo-kho', frequency: 500 }
 ];
 
-// Article sources for realistic links
-const ARTICLE_SOURCES = [
-  'rt.com', 'rbc.ru', 'kommersant.ru', 'vedomosti.ru', 'gazeta.ru',
-  'lenta.ru', 'interfax.ru', 'tass.ru', 'ria.ru', 'moscow.ru'
+// 5 sample Russian articles
+const SAMPLE_ARTICLES = [
+  {
+    title: "Политические новости в России",
+    content: `Российская политика продолжает развиваться. Правительство обсуждает новые законы. 
+    Граждане активно участвуют в политической жизни страны. Выборы приближаются, и все готовятся.
+    Политические партии представляют свои программы. Народ внимательно следит за событиями.`,
+    difficulty: "intermediate",
+    source: "rt.com/politics/12345"
+  },
+  {
+    title: "Экономика и бизнес сегодня",
+    content: `Российская экономика показывает стабильный рост. Многие компании увеличивают прибыль.
+    Новые технологии помогают бизнесу развиваться. Рынок товаров и услуг расширяется.
+    Предприниматели инвестируют в инновационные проекты. Работа становится более эффективной.`,
+    difficulty: "beginner",
+    source: "rbc.ru/business/67890"
+  },
+  {
+    title: "Современные технологии в жизни",
+    content: `Интернет изменил нашу повседневную жизнь. Компьютеры стали незаменимыми помпомощниками.
+    Мобильные телефоны позволяют общаться в любое время. Социальные сети объединяют людей.
+    Искусственный интеллект развивается очень быстро. Будущее технологий выглядит многообещающе.`,
+    difficulty: "intermediate",
+    source: "tass.ru/tech/54321"
+  },
+  {
+    title: "Русская культура и традиции",
+    content: `Россия славится своими культурными традициями. Музеи хранят богатое наследие.
+    Театры продолжают радовать зрителей классическими спектаклями. Литература остается важной частью культуры.
+    Народные праздники объединяют семьи и друзей. Искусство вдохновляет новые поколения.`,
+    difficulty: "beginner",
+    source: "culture.ru/articles/98765"
+  },
+  {
+    title: "Путешествия по России",
+    content: `Путешествовать по России - это удивительный опыт. Красивые города ждут туристов.
+    Природа поражает своим разнообразием и красотой. Гостиницы предлагают комфортное размещение.
+    Местная кухня удивляет вкусными блюдами. Каждый регион имеет свои особенности и достопримечательности.`,
+    difficulty: "beginner",
+    source: "travel.ru/guide/13579"
+  }
 ];
 
 const COURSE_CATEGORIES = [
@@ -52,14 +90,32 @@ function generateFakeUsers(count: number): Array<{
   }));
 }
 
-// Generate realistic article URL
-function generateArticleUrl(title: string): string {
-  const source = faker.helpers.arrayElement(ARTICLE_SOURCES);
-  const slug = title.toLowerCase()
-    .replace(/[^a-zA-Z0-9]/g, '-')
-    .replace(/-+/g, '-')
-    .substring(0, 50);
-  return `https://${source}/articles/${faker.date.recent().getFullYear()}/${faker.number.int({ min: 1, max: 12 })}/${slug}`;
+// Add this function to your existing seed.ts main() function
+async function seedArticles(courses: any[]) {
+  console.log('📰 Creating sample Russian articles...');
+  const articles = [];
+  
+  for (const articleData of SAMPLE_ARTICLES) {
+    // Find the corresponding course by category
+    const course = courses.find(c => c.title.includes(articleData));
+    
+    const article = await prisma.article.create({
+      data: {
+        title: articleData.title,
+        content: articleData.content,
+        difficulty: articleData.difficulty,
+        wordCount: articleData.content.split(/\s+/).length,
+        readingTime: Math.ceil(articleData.content.split(/\s+/).length / 150), // ~150 words per minute
+        source: `https://${articleData.source}`,
+        publishedAt: faker.date.past({ years: 0.5 }), // Fixed: use years instead of months
+        createdAt: faker.date.past({ years: 0.5 }), // Fixed: use years instead of months
+      }
+    });
+    articles.push(article);
+  }
+  
+  console.log(`✅ Created ${articles.length} Russian articles`);
+  return articles;
 }
 
 // Helper function to transliterate Russian to Latin
@@ -77,29 +133,22 @@ function transliterateWord(russianWord: string): string {
   ).join('');
 }
 
-// Function to get Russian words with all the processing
-function getRussianWords() {
-  return RUSSIAN_WORDS.map(word => ({
-    word: word.word,
-    translation: word.translation,
-    definition: word.definition,
-    partOfSpeech: word.partOfSpeech,
-    transcription: word.pronunciation, // Map pronunciation to transcription
-    transliteration: transliterateWord(word.word), // Convert to Latin
-    frequency: word.frequency,
-    // examples: generateExamples(word.word), // Generate example sentences
-    // grammaticalForms: generateGrammaticalForms(word.word, word.partOfSpeech),
-  }));
+// Generate example sentences using the word
+function generateExamples(word: string): string[] {
+  return [
+    `Пример с словом ${word}.`,
+    `Другой пример с ${word}.`
+  ];
 }
 
 // Function to seed users
 async function seedUsers() {
   console.log('🌱 Seeding users...');
-  const users = generateFakeUsers(10); // Generate 10 fake users with fake emails
+  const users = generateFakeUsers(100); 
   
   for (const userData of users) {
     await prisma.user.upsert({
-      where: { email: userData.email! }, // Assert non-null since faker generates valid emails
+      where: { email: userData.email! }, 
       update: userData,
       create: userData,
     });
@@ -111,16 +160,19 @@ async function seedUsers() {
 async function seedWords() {
   console.log('🌱 Seeding Russian words...');
   
-  const wordsData = getRussianWords();
-  
-  for (const wordData of wordsData) {
-    await prisma.word.upsert({
-      where: { word: wordData.word },
-      update: wordData,
-      create: wordData,
-    });
-  }
-  console.log(`✅ ${wordsData.length} Russian words seeded successfully`);
+  // Use the expanded word list
+  const wordsData = RUSSIAN_WORDS.map(word => ({
+    word: word.word,                    // "здравствуйте" → word field
+    translation: word.translation,      // "hello (formal)" → translation field
+    definition: word.definition,        // "formal greeting" → definition field
+    partOfSpeech: word.partOfSpeech,   // "interjection" → partOfSpeech field
+    transcription: word.pronunciation,  // "zdra-stvuy-tye" → transcription field
+    transliteration: transliterateWord(word.word),
+    frequency: word.frequency,
+    examples: generateExamples(word.word),
+    // grammaticalForms: generateGrammaticalForms(word.word, word.partOfSpeech),
+  }));
+
 }
 
 // Main seed function
@@ -138,7 +190,7 @@ async function main() {
         name: user.name,
         email: user.email,
         role: user.role,
-        emailVerified: new Date(), // Add required field
+        emailVerified: new Date(),
       }
     });
     users.push(createdUser as User & { role: 'instructor' | 'student' });
@@ -146,9 +198,32 @@ async function main() {
 
   console.log(`✅ Created ${users.length} users using Faker.js Person API`);
 
+  // Create Articles (simplified - no courses needed for basic 3-table setup)
+    console.log('📰 Creating sample Russian articles...');
+    const articles = [];
+    
+    for (const articleData of SAMPLE_ARTICLES) {
+      const article = await prisma.article.create({
+        data: {
+          title: articleData.title,
+          content: articleData.content,
+          difficulty: articleData.difficulty,
+          wordCount: articleData.content.split(/\s+/).length,
+          readingTime: Math.ceil(articleData.content.split(/\s+/).length / 150),
+          source: `https://${articleData.source}`,
+          publishedAt: faker.date.past({ years: 0.5 }),
+          createdAt: faker.date.past({ years: 0.5 }),
+        }
+      });
+      articles.push(article);
+    }
+    
+    console.log(`✅ Created ${articles.length} Russian articles`);
+
   // Create Words (Russian vocabulary)
   console.log('📚 Creating Russian vocabulary...');
   const words = [];
+  console.log(RUSSIAN_WORDS);
   for (const wordData of RUSSIAN_WORDS) {
     const word = await prisma.word.create({
       data: {
@@ -161,8 +236,7 @@ async function main() {
           `${wordData.word} - пример предложения с этим словом.`,
           `Example: ${wordData.translation} used in context.`
         ],
-        pronunciation: wordData.pronunciation,
-        context: faker.lorem.sentence()
+        pronunciation: wordData.pronunciation
       }
     });
     words.push(word);
@@ -178,8 +252,7 @@ async function main() {
         partOfSpeech: faker.helpers.arrayElement(['noun', 'verb', 'adjective', 'adverb', 'preposition']),
         frequency: faker.number.int({ min: 1, max: 1000 }),
         examples: [faker.lorem.sentence(), faker.lorem.sentence()],
-        pronunciation: faker.word.sample(),
-        context: faker.lorem.sentence()
+        pronunciation: faker.word.sample()
       }
     });
     words.push(word);
@@ -187,88 +260,19 @@ async function main() {
 
   console.log(`✅ Created ${words.length} words (${RUSSIAN_WORDS.length} authentic Russian + ${words.length - RUSSIAN_WORDS.length} generated)`);
 
-  // Create Courses
-  console.log('🎓 Creating courses...');
-  const courses = [];
-  const instructors = users.filter(u => u.role === 'instructor');
-  
-  for (const categoryData of COURSE_CATEGORIES) {
-    const course = await prisma.course.create({
-      data: {
-        name: categoryData.name,
-        description: `${categoryData.description}. ${faker.lorem.paragraph()}`,
-        category: categoryData.name.toLowerCase(),
-        icon: categoryData.icon,
-        color: categoryData.color,
-        difficulty: categoryData.difficulty,
-        instructorId: faker.helpers.arrayElement(instructors).id,
-        isActive: true,
-      }
-    });
-    courses.push(course);
-  }
-
-  console.log(`✅ Created ${courses.length} courses`);
-
-  // Create Articles with realistic Russian news sources
-  console.log('📰 Creating articles with realistic source links...');
-  const articles = [];
-  for (let i = 0; i < 75; i++) {
-    const course = faker.helpers.arrayElement(courses);
-    const source = faker.helpers.arrayElement(ARTICLE_SOURCES);
-    const articleId = faker.string.numeric(8);
-    
-    const article = await prisma.article.create({
-      data: {
-        title: faker.lorem.sentence({ min: 4, max: 10 }),
-        content: faker.lorem.paragraphs({ min: 4, max: 8 }, '\n\n'),
-        contentWithIPA: faker.lorem.paragraphs({ min: 4, max: 8 }, '\n\n') + '\n\n[DeepL API would provide IPA annotations here]',
-        courseId: course.id,
-        difficulty: course.difficulty,
-        wordCount: faker.number.int({ min: 150, max: 2500 }),
-        readingTime: faker.number.int({ min: 3, max: 20 }),
-        tags: faker.helpers.arrayElements(['политика', 'экономика', 'культура', 'наука', 'спорт', 'технологии'], { min: 1, max: 3 }),
-        imageUrl: faker.image.url({ width: 800, height: 600 }),
-        myLinguaScore: faker.number.float({ min: 0.25, max: 0.95, fractionDigits: 2 }),
-        source: `${source}/${articleId}`,
-        publishedAt: faker.date.past({ years: 2 }),
-      }
-    });
-    articles.push(article);
-  }
-
-  console.log(`✅ Created ${articles.length} articles with realistic Russian news sources`);
-
   // Print detailed summary
-  const summary = {
-    users: await prisma.user.count(),
-    courses: await prisma.course.count(),
-    articles: await prisma.article.count(),
-    words: await prisma.word.count(),
-    enrollments: await prisma.enrollment.count(),
-    assignments: await prisma.assignment.count(),
-    submissions: await prisma.submission.count(),
-    quizzes: await prisma.quiz.count(),
-    userWords: await prisma.userWord.count(),
-    readingSessions: await prisma.readingSession.count(),
-    wordLookups: await prisma.wordLookup.count(),
-    vocabularyLists: await prisma.vocabularyList.count(),
-    userReadingPreferences: await prisma.userReadingPreferences.count(),
-    bookmarkedArticles: await prisma.bookmarkedArticle.count()
-  };
+    const summary = {
+      users: await prisma.user.count(),
+      articles: await prisma.article.count(),
+      words: await prisma.word.count()
+    };
 
-  console.log('\n📊 Complete Database Summary:');
-  Object.entries(summary).forEach(([table, count]) => {
-    console.log(`   ${table}: ${count}`);
-  });
-  
-  console.log('\n🚀 Cool Features Implemented:');
-  console.log('   🌐 DeepL API Integration - Real-time Russian-English translation');
-  console.log('   📖 Wiktionary API Integration - Comprehensive dictionary lookups');
-  console.log('   🔗 Realistic Article URLs - Authentic Russian news sources');
-  console.log('   📱 Interactive Reading Experience - Word lookup and vocabulary building');
-  
-  console.log('\n🎯 Your Russian Language Learning LMS is fully seeded and ready!');
+    console.log('\n📊 Complete Database Summary:');
+    Object.entries(summary).forEach(([table, count]) => {
+      console.log(`   ${table}: ${count}`);
+    });
+    
+    console.log('\n🎯 Your Russian Language Learning LMS is fully seeded and ready!');
 }
 
 // (async () => {
@@ -297,6 +301,7 @@ async function main() {
 // })();
 
 // Execute the seed function
+
 main()
   .catch((e) => {
     console.error('❌ Seed failed:', e);
