@@ -17,6 +17,7 @@
   "devDependencies": {
     "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
+    "@types/express": "^5.0.3",
     "prettier": "^3.6.2",
     "prisma": "latest",
     "tsx": "^4.20.5",
@@ -32,7 +33,8 @@
   },
   "dependencies": {
     "@faker-js/faker": "^10.0.0",
-    "@prisma/client": "latest",
+    "@nestjs/mapped-types": "*",
+    "@prisma/client": "^6.17.0",
     "@tailwindcss/cli": "^4.1.13",
     "tailwindcss": "^4.1.13"
   },

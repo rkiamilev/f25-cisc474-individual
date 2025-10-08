@@ -1,6 +1,7 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-// take down tables not used
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/client"
+}
 
 datasource db {
   provider  = "postgresql"
@@ -8,43 +9,43 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
-  output   = "../generated/client"
-}
-
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model User {
-  id            String    @id @default(cuid())
   name          String?
   email         String?   @unique
   emailVerified DateTime?
   role          String    @default("student")
+  id            BigInt    @default(autoincrement())
 
+  @@ignore
 }
 
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model Article {
-  id            String   @id @default(cuid())
-  title         String
-  content       String   // Russian text content
-  difficulty    String   // "beginner", "intermediate", "advanced"
-  wordCount     Int
-  readingTime   Int      // in minutes
-  source        String?  // news source URL
-  publishedAt   DateTime?
-  createdAt     DateTime @default(now())
+  title       String
+  content     String
+  difficulty  String
+  wordCount   Int
+  readingTime Int
+  source      String?
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  id          BigInt    @default(autoincrement())
 
   @@map("articles")
+  @@ignore
 }
 
 model Word {
-  id           String   @id @default(cuid())
-  word         String   @unique  // Russian word in Cyrillic
-  translation  String              // English translation
-  definition   String              // Word definition
-  partOfSpeech String              // noun, verb, adjective, etc.
-  frequency    Int                 // Usage frequency (1-1000)
-  examples     String[]            // Example sentences
-  pronunciation String?            // IPA or phonetic guide
+  word           String   @unique
+  translation    String
+  definition     String
+  partOfSpeech   String
+  frequency      Int
+  examples       String[]
+  pronunciation  String?
+  id_backup_text String?
+  id             BigInt   @default(autoincrement())
 
   @@map("words")
 }
