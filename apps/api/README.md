@@ -1,4 +1,22 @@
-# With-NestJs | API
+# API Endpoints Documentation
+
+Base URL: `https://your-app-name.onrender.com`
+
+## Live Endpoints
+
+Click the links below to test the deployed endpoints:
+
+### Users
+- [Get All Users](https://your-app-name.onrender.com/user)
+- [Get User by ID](https://your-app-name.onrender.com/user/1)
+
+### Articles
+- [Get All Articles](https://your-app-name.onrender.com/articles)
+- [Get Article by ID](https://your-app-name.onrender.com/articles/1)
+
+### Words
+- [Get All Words](https://your-app-name.onrender.com/words)
+- [Get Word by ID](https://your-app-name.onrender.com/words/1)
 
 ## Getting Started
 
