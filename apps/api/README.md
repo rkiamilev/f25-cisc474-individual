@@ -1,4 +1,27 @@
-# With-NestJs | API
+# Russian Language Learning LMS - Backend API
+
+This is a NestJS backend API for a Russian Language Learning Management System.
+
+## Database Tables
+
+The API provides endpoints for the following database tables:
+- **Users** - Student and instructor user accounts
+- **Articles** - Russian reading materials with difficulty levels
+- **Words** - Russian vocabulary with translations and definitions
+
+## API Endpoints
+
+### Users
+- `GET /user` - Get all users
+- `GET /user/:id` - Get user by ID
+
+### Articles  
+- `GET /articles` - Get all articles
+- `GET /articles/:id` - Get article by ID
+
+### Words
+- `GET /words` - Get all words
+- `GET /words/:id` - Get word by ID
 
 ## Getting Started
 
