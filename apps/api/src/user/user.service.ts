@@ -63,9 +63,9 @@ export class UserService {
       });
     }
 
-    async findOne(id: string) {
+    async findOne(id: string | bigint) {
         return this.prisma.user.findUnique({
-            where: { id },
+            where: { id: BigInt(id) }, 
         });
     }
 }

@@ -182,11 +182,13 @@ async function main() {
   const users: Array<User & { role: 'instructor' | 'student' }> = [];
 
   // Generate and create users
-  const userData = generateFakeUsers(15); // Generate 15 users
+  const userData = generateFakeUsers(15);
   
   for (const user of userData) {
-    const createdUser = await prisma.user.create({
-      data: {
+    const createdUser = await prisma.user.upsert({
+      where: { email: user.email }, // Use email as unique identifier
+      update: user,
+      create: {
         name: user.name,
         email: user.email,
         role: user.role,
@@ -198,35 +200,54 @@ async function main() {
 
   console.log(`✅ Created ${users.length} users using Faker.js Person API`);
 
-  // Create Articles (simplified - no courses needed for basic 3-table setup)
-    console.log('📰 Creating sample Russian articles...');
-    const articles = [];
-    
-    for (const articleData of SAMPLE_ARTICLES) {
-      const article = await prisma.article.create({
-        data: {
-          title: articleData.title,
-          content: articleData.content,
-          difficulty: articleData.difficulty,
-          wordCount: articleData.content.split(/\s+/).length,
-          readingTime: Math.ceil(articleData.content.split(/\s+/).length / 150),
-          source: `https://${articleData.source}`,
-          publishedAt: faker.date.past({ years: 0.5 }),
-          createdAt: faker.date.past({ years: 0.5 }),
-        }
-      });
-      articles.push(article);
-    }
-    
-    console.log(`✅ Created ${articles.length} Russian articles`);
+  // Create Articles 
+  console.log('📰 Creating sample Russian articles...');
+  const articles = [];
+  
+  for (const articleData of SAMPLE_ARTICLES) {
+    const article = await prisma.article.upsert({
+      where: { 
+        // Use a combination that makes it unique, or add a unique field to your schema
+        title: articleData.title 
+      },
+      update: {
+        content: articleData.content,
+        difficulty: articleData.difficulty,
+        wordCount: articleData.content.split(/\s+/).length,
+        readingTime: Math.ceil(articleData.content.split(/\s+/).length / 150),
+        source: `https://${articleData.source}`,
+      },
+      create: {
+        title: articleData.title,
+        content: articleData.content,
+        difficulty: articleData.difficulty,
+        wordCount: articleData.content.split(/\s+/).length,
+        readingTime: Math.ceil(articleData.content.split(/\s+/).length / 150),
+        source: `https://${articleData.source}`,
+        publishedAt: faker.date.past({ years: 0.5 }),
+        createdAt: faker.date.past({ years: 0.5 }),
+      }
+    });
+    articles.push(article);
+  }
+  
+  console.log(`✅ Created ${articles.length} Russian articles`);
 
-  // Create Words (Russian vocabulary)
+  // Create Words (Russian vocabulary) - Use upsert to avoid duplicates
   console.log('📚 Creating Russian vocabulary...');
   const words = [];
-  console.log(RUSSIAN_WORDS);
+  
   for (const wordData of RUSSIAN_WORDS) {
-    const word = await prisma.word.create({
-      data: {
+    const word = await prisma.word.upsert({
+      where: { word: wordData.word }, // Use the word itself as unique identifier
+      update: {
+        translation: wordData.translation,
+        definition: wordData.definition,
+        partOfSpeech: wordData.partOfSpeech,
+        frequency: wordData.frequency,
+        pronunciation: wordData.pronunciation,
+      },
+      create: {
         word: wordData.word,
         translation: wordData.translation,
         definition: wordData.definition,
@@ -236,7 +257,7 @@ async function main() {
           `${wordData.word} - пример предложения с этим словом.`,
           `Example: ${wordData.translation} used in context.`
         ],
-        pronunciation: wordData.pronunciation
+        pronunciation: wordData.pronunciation,
       }
     });
     words.push(word);
@@ -244,63 +265,40 @@ async function main() {
 
   // Add more generated Russian-like words
   for (let i = 0; i < 85; i++) {
-    const word = await prisma.word.create({
-      data: {
-        word: faker.lorem.word() + faker.helpers.arrayElement(['ый', 'ой', 'ий', 'ая', 'ое', 'ать', 'ить', 'еть']),
+    const generatedWord = faker.lorem.word() + faker.helpers.arrayElement(['ый', 'ой', 'ий', 'ая', 'ое', 'ать', 'ить', 'еть']);
+    
+    const word = await prisma.word.upsert({
+      where: { word: generatedWord },
+      update: {},
+      create: {
+        word: generatedWord,
         translation: faker.word.words({ count: { min: 1, max: 3 } }),
         definition: faker.lorem.sentence(),
         partOfSpeech: faker.helpers.arrayElement(['noun', 'verb', 'adjective', 'adverb', 'preposition']),
         frequency: faker.number.int({ min: 1, max: 1000 }),
         examples: [faker.lorem.sentence(), faker.lorem.sentence()],
-        pronunciation: faker.word.sample()
+        pronunciation: faker.word.sample(),
       }
     });
     words.push(word);
   }
 
-  console.log(`✅ Created ${words.length} words (${RUSSIAN_WORDS.length} authentic Russian + ${words.length - RUSSIAN_WORDS.length} generated)`);
+  console.log(`✅ Created ${words.length} words including ${RUSSIAN_WORDS.length} authentic Russian words`);
 
-  // Print detailed summary
-    const summary = {
-      users: await prisma.user.count(),
-      articles: await prisma.article.count(),
-      words: await prisma.word.count()
-    };
+  // Print summary
+  const summary = {
+    users: await prisma.user.count(),
+    articles: await prisma.article.count(),
+    words: await prisma.word.count()
+  };
 
-    console.log('\n📊 Complete Database Summary:');
-    Object.entries(summary).forEach(([table, count]) => {
-      console.log(`   ${table}: ${count}`);
-    });
-    
-    console.log('\n🎯 Your Russian Language Learning LMS is fully seeded and ready!');
+  console.log('\n📊 Complete Database Summary:');
+  Object.entries(summary).forEach(([table, count]) => {
+    console.log(`   ${table}: ${count}`);
+  });
+  
+  console.log('\n🎯 Your Russian Language Learning LMS is fully seeded and ready!');
 }
-
-// (async () => {
-//   try {
-//     await Promise.all(
-//       DEFAULT_USERS.map((user) =>
-//         prisma.user.upsert({
-//           where: {
-//             email: user.email!,
-//           },
-//           update: {
-//             ...user,
-//           },
-//           create: {
-//             ...user,
-//           },
-//         })
-//       )
-//     );
-//   } catch (error) {
-//     console.error(error);
-//     process.exit(1);
-//   } finally {
-//     await prisma.$disconnect();
-//   }
-// })();
-
-// Execute the seed function
 
 main()
   .catch((e) => {
