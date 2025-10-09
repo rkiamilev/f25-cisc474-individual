@@ -3,5 +3,9 @@
   "compilerOptions": {
     "baseUrl": "./",
     "outDir": "./dist"
+    "paths": {
+      "@repo/database": ["../../packages/database/src"],
+      "@repo/database/*": ["../../packages/database/src/*"]
+    }
   }
 }
