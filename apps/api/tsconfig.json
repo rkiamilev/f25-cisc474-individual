@@ -2,7 +2,7 @@
   "extends": "@repo/typescript-config/nestjs.json",
   "compilerOptions": {
     "baseUrl": "./",
-    "outDir": "./dist"
+    "outDir": "./dist",
     "paths": {
       "@repo/database": ["../../packages/database/src"],
       "@repo/database/*": ["../../packages/database/src/*"]
