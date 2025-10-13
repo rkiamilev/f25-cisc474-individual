@@ -1,27 +1,22 @@
-# Russian Language Learning LMS - Backend API
+# API Endpoints Documentation
 
-This is a NestJS backend API for a Russian Language Learning Management System.
+Base URL: `https://your-app-name.onrender.com`
 
-## Database Tables
+## Live Endpoints
 
-The API provides endpoints for the following database tables:
-- **Users** - Student and instructor user accounts
-- **Articles** - Russian reading materials with difficulty levels
-- **Words** - Russian vocabulary with translations and definitions
-
-## API Endpoints
+Click the links below to test the deployed endpoints:
 
 ### Users
-- `GET /user` - Get all users
-- `GET /user/:id` - Get user by ID
+- [Get All Users](https://your-app-name.onrender.com/user)
+- [Get User by ID](https://your-app-name.onrender.com/user/1)
 
-### Articles  
-- `GET /articles` - Get all articles
-- `GET /articles/:id` - Get article by ID
+### Articles
+- [Get All Articles](https://your-app-name.onrender.com/articles)
+- [Get Article by ID](https://your-app-name.onrender.com/articles/1)
 
 ### Words
-- `GET /words` - Get all words
-- `GET /words/:id` - Get word by ID
+- [Get All Words](https://your-app-name.onrender.com/words)
+- [Get Word by ID](https://your-app-name.onrender.com/words/1)
 
 ## Getting Started
 
