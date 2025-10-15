@@ -69,6 +69,10 @@ DATABASE_URL="postgres://postgres.[ref]:[password]@aws-1-us-east-1.pooler.supaba
 DIRECT_URL="postgres://postgres.[ref]:[password]@aws-1-us-east-1.pooler.supabase.com:5432/postgres"
 ```
 
+DATABASE_URL="postgres://postgres.dimxmugtdaodvbsfbqac:ogcGIAKc4fiYcwQL@aws-1-us-east-1.pooler.supabase.com:6543/postgres?pgbouncer=true&connection_limit=1"
+
+DIRECT_URL="postgres://postgres.dimxmugtdaodvbsfbqac:ogcGIAKc4fiYcwQL@aws-1-us-east-1.pooler.supabase.com:5432/postgres"
+
 Then, you can make the first push of your initial database setup: `npx prisma db push`
 
 Then you can populate the database with an initial row by using: `npx prisma db seed`
