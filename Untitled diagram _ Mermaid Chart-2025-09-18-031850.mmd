@@ -1,0 +1,35 @@
+flowchart TD
+    A[Student Login] --> B[Dashboard Page]
+    B --> C{Navigation Menu}
+    
+    C -->|Click Reading| D[Reading Page]
+    C -->|Click Library| E[Library Page]
+    C -->|Click Progress| F[Progress Page]
+    C -->|Click Vocabulary| G[Vocabulary Page]
+    
+    D --> H[Text Scanner Component]
+    H --> I[Mouse Hover Detection]
+    I --> J[Dictionary API Query]
+    J --> K[Dictionary Database]
+    K --> L[Word Popup Display]
+    
+    L --> M[Word Status Update]
+    M --> N[User Progress Database]
+    
+    E --> O[Content Library Database]
+    O --> P[Display Flashcards/Study Materials]
+    
+    F --> Q[Query Progress Database]
+    Q --> R[Display Charts and Stats]
+    
+    G --> S[Query Vocabulary Database]
+    S --> T[Display Word List]
+    
+    N --> U[(User Data Storage)]
+    K --> V[(Dictionary Storage)]
+    O --> W[(Content Storage)]
+    
+    style D fill:#e1f5fe
+    style E fill:#f3e5f5
+    style F fill:#e8f5e8
+    style G fill:#fff3e0

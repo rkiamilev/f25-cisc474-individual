@@ -21,6 +21,10 @@ const ThemeImage = (props: Props) => {
 export default function Home() {
   return (
     <div className={styles.page}>
+      <h1>Hello World!</h1>
+      <h1>Hello World!</h1>
+      <h1>Hello World!</h1>
+      <h1>Hello World!</h1>
       <main className={styles.main}>
         <ThemeImage
           className={styles.logo}
@@ -33,7 +37,13 @@ export default function Home() {
         />
         <ol>
           <li>
-            Get started by editing <code>apps/docs/app/page.tsx</code>
+            GEGHAEGHAELGH;ojjkjkjkljkxLAEGHIH started by editing <code>apps/docs/app/page.tsx</code>
+          </li>
+          <li>
+            GEGHAEGHAELGHLAEGHIH started by editing <code>apps/docs/app/page.tsx</code>
+          </li>
+          <li>
+            GEGHAEGHAELGHLAEGHIH started by editing <code>apps/docs/app/page.tsx</code>
           </li>
           <li>Save and see your changes instantly.</li>
         </ol>
